@@ -1,0 +1,69 @@
+/*
+ ============================================================================
+ Name        : PParcial2labo1.c
+ Author      : Carlos Lopez
+ Version     :
+ Copyright   : Your copyright notice
+ Description : Segundo Parcial Laboratorio 1
+ ============================================================================
+ */
+
+#include <stdio.h>
+#include <stdlib.h>
+#include "IOdata.h"
+#include "articulo.h"
+#include "LinkedList.h"
+#include "parser.h"
+#include "controller.h"
+
+int main(void)
+{
+	setbuf(stdout, NULL);
+	LinkedList* pArrayListArticulos;
+	pArrayListArticulos = ll_newLinkedList();
+
+	int option = 0;
+			//int rTotal = 0;
+	char bufferNombreDeArchivo[20];
+	char menuDeOpciones[] =
+			"\n\n1 CARGAR ARCHIVO\
+			 \n\n2 IMPRIMIR LA LISTA DE ARTICULOS\
+			 \n\n3 MOSTRAR LISTA ORDENADA POR NOMBRE DE ARTICULO\
+			 \n\n4 CALCULAR DESCUENTOS\
+			 \n\n5 GUARDAR ARCHIVO CON DESCUENTOS FINALES\
+		     \n\n6 SALIR\
+			 \n\n Ingrese una opcion: ";
+	char mensajeError[] = "Error. Debe ingresar un opcion valida";
+
+	while(option != 6)
+	{
+	system("cls");
+	getValidOption(&option, menuDeOpciones,mensajeError,1,6,3);
+	switch (option)
+	{
+		case 1:
+			getComplexString(bufferNombreDeArchivo, "\nIngrese el nomnbre y extensión del archivo (.csv) del archivo: ", "Error. Intente nuevamente");
+			controller_loadFromText(bufferNombreDeArchivo, pArrayListArticulos);
+			break;
+		case 2:
+			ll_sort(pArrayListArticulos,ordenarPorArticulo,1);
+
+			break;
+		case 3:
+			printArticulos(pArrayListArticulos);
+			system("pause");
+			break;
+		case 4:
+			ll_map(pArrayListArticulos,calculoDeDescuentos);
+			printArticulos(pArrayListArticulos);
+			system("pause");
+			break;
+		case 5:
+			controller_saveAsText("mapeado.csv",pArrayListArticulos);
+			break;
+		case 6:
+		break;
+	}
+}
+	return 0;
+}

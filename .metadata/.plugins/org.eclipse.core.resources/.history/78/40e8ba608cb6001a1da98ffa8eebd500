@@ -1,0 +1,137 @@
+/*
+ * parser.c
+ *
+ *  Created on: 20 Jun 2020
+ *      Author: Carlos
+ */
+//********************************************************************
+
+#include "IOdata.h"
+#include "controller.h"
+#include "LinkedList.h"
+#include "ventas.h"
+
+int parser_EventaFromText(FILE* pFile , LinkedList* pArrayListVentas)
+{
+	char bufferId[128];
+	char bufferArticulo[128];
+	char bufferMedida[128];
+	char bufferPrecio[128];
+	char bufferSala[128];
+	char bufferCantidadEntradas[128];
+	char bufferDia[02];
+	//char bufferDiaNombre[15]="";
+	char bufferHoras[05];
+	char bufferMinutos[05];
+
+
+	char bufferMonto[128]="0.0";
+	//char bufferCuit[128];
+	int cant = 0;
+	int retCode = -1;
+	int cont = 0;
+	//int ret;
+	Eventas* pAuxEventas = NULL;
+
+	fscanf(pFile, "%[^,],%[^,],%[^,],%[^,],%[^,],%[^\n]\n", bufferId, bufferNpelicula, bufferDiaTitulo, bufferHorarioTitulo,bufferSala,bufferCantidadEntradas);
+	//printf("\n ret fscanf = : %d", ret);
+//	system("pause");
+	while( !feof(pFile) )
+	{
+	cant = fscanf(pFile, "%[^,],%[^,],%[^,],%[^:]:%[^,],%[^,],%[^,],%[^\n]\n", bufferId,bufferNpelicula,bufferDia,bufferHoras,bufferMinutos,bufferSala,bufferCantidadEntradas,bufferMonto);
+	printf("\n bufferSala fscanf = : %s\n", bufferSala);
+	system("pause");
+	if( cant < 8)
+		{break;}
+	//	printf("\n bufferHoras viene asi = : %s", bufferNpelicula);
+		//system("pause");
+		pAuxEventas = venta_newParametros(bufferId,bufferNpelicula,bufferDia,bufferHoras,bufferMinutos,bufferSala,bufferCantidadEntradas,bufferMonto);
+
+		if(pAuxEventas != NULL)
+		{
+			if(!ll_add(pArrayListVentas, pAuxEventas))
+			{
+				retCode = 0;
+				cont++;
+			}else{
+				printf("Hubo un error al cargar la lista");
+			}
+		}
+
+	}
+	//printf("\n cant de leidos = : %d", cont);
+	//system("pause");
+	eventa_delete(pAuxEventas);
+    return retCode;
+}
+/*
+int controller_saveAsText(char* path , LinkedList* pArrayListVentas)
+{
+	int retCode = -1;
+	    int i;
+	    int length;
+	    int bufferId;
+	    char bufferNombrePelicula[128];
+	    char bufferDiaNombre[128];
+	    int bufferMonto;
+	    int bufferSala;
+	    int bufferCantidadEntradas;
+	    int bufferDia;
+
+
+	    if(path!=NULL && pArrayListVentas!=NULL)
+	    {
+	    	length = ll_len(pArrayListVentas);
+
+	        if(length == 0)
+	        {
+	        	showMessage("Aun no hay empleados cargados.");
+	        	system("pause");
+	        }
+	        else
+	        {
+		        FILE* pFile;
+		        Eventas* auxP = NULL;
+		        auxP = employee_new();
+		        pFile = fopen(path,"w");
+					if(pFile!=NULL )
+					{
+						fprintf(pFile, "%s,%s,%s,%s,%s,%s,%s\n", "Id_Venta", "Nombre_Pelicula","Dia","Sala", "Cantidad_Entradas","Monto_Venta");
+						for(i=0; i<length; i++)
+						{
+							auxP = (Eventas*)ll_get(pArrayListVentas,i);
+
+							if(auxP != NULL)
+							{
+
+								if(!getEventas(bufferId,bufferNombrePelicula,bufferDia,bufferDiaNombre,bufferCantidadEntradas,bufferSala,bufferMonto,auxP))
+								{
+									fprintf(pFile, "%d,%s,%d,%s,%d,%d,%f\n", bufferId,bufferNombrePelicula,bufferDia,bufferDiaNombre,bufferCantidadEntradas,bufferSala,bufferMonto);
+								}
+								else
+								{
+									printf("Error\n");
+								}
+								retCode = 0;
+							}
+						}
+					if(retCode == 0)
+					{
+						showMessage("ARCHIVO GUARDADO CON EXITO");
+						system("pause");
+					}
+
+
+
+						fclose(pFile);
+					}
+	        }
+		}
+
+	    if(retCode == 0)
+	    {
+	    	showMessage("Archivo guardado con exito!");
+	    }
+	    return retCode;
+}*/
+

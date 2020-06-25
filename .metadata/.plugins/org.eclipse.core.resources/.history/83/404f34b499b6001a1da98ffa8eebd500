@@ -1,0 +1,29 @@
+/*
+ ============================================================================
+ Name        : PParcial2labo1.c
+ Author      : Carlos Lopez
+ Version     :
+ Copyright   : Your copyright notice
+ Description : Segundo Parcial Laboratorio 1
+ ============================================================================
+ */
+
+#include <stdio.h>
+#include <stdlib.h>
+#include "articulo.h"
+
+int main(void)
+{
+	setbuf(stdout, NULL);
+	LinkedList* pArrayListArticulos;
+	pArrayListArticulos = ll_newLinkedList();
+
+
+
+
+
+
+
+
+	return 0;
+}

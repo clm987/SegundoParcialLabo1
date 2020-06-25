@@ -1,0 +1,246 @@
+/*
+ * controller.c
+ *
+ *  Created on: 20 Jun 2020
+ *      Author: Carlos
+ */
+#include "IOdata.h"
+#include "parser.h"
+#include "LinkedList.h"
+#include "articulo.h"
+#include "controller.h"
+int controller_loadFromText(char* path , LinkedList* pArrayListVentas)
+{
+	FILE* file;
+	int retCode = -1;
+	int length;
+
+	length = ll_len(pArrayListVentas);
+
+	if(length == 0)
+	{
+		file = fopen(path,"r");
+
+		if(file == NULL)
+		{
+		 showMessage ("Ocurrio un error al abrir el archivo. Se cerrara la aplicacion");
+		 system("pause");
+		}
+
+		if(!parser_EventaFromText(file , pArrayListVentas))
+		{
+			retCode = 0;
+		}
+
+		fclose(file);
+
+		if(retCode == 0)
+		{
+		showMessage("Base de articulos cargada con exito!");
+		system("pause");
+		}
+	}
+	else
+	{
+		showMessage("La base de articulos ya fue cargada previamente!");
+	}
+	 printRegistros(pArrayListVentas);
+	 system("pause");
+    return retCode;
+}
+
+//////////////////////////////////////////////////////////////////
+int controller_saveAsText(char* path , LinkedList* pArrayListVentas)
+{
+	int retCode = -1;
+	    int i;
+	    int length;
+	    int bufferId;
+	    char bufferNombrePelicula[128];
+	    char bufferDiaNombre[128];
+	    float bufferMonto;
+	    int bufferSala;
+	    int bufferCantidadEntradas;
+	    int bufferDia;
+
+
+	    if(path!=NULL && pArrayListVentas!=NULL)
+	    {
+	    	length = ll_len(pArrayListVentas);
+
+	        if(length == 0)
+	        {
+	        	showMessage("Aun no hay empleados cargados.");
+	        	system("pause");
+	        }
+	        else
+	        {
+		        FILE* pFile;
+		        Eventas* auxP = NULL;
+		  //      Eventas* auxPruba = (Eventas*)ll_get(pArrayListVentas,3);
+		        //getEventas(&bufferId,bufferNombrePelicula,&bufferDia,bufferDiaNombre,&bufferCantidadEntradas,&bufferSala,&bufferMonto,auxPruba);
+		    //    printf("\nASI ESTAN LOS DATOS EN EL ULTIMO ELEMENTO: %d  %s %d %s %d %d %f\n", bufferId,bufferNombrePelicula,bufferDia,bufferDiaNombre,bufferCantidadEntradas,bufferSala,bufferMonto);
+		   //     system("pause");
+		        auxP = eventa_new();
+		        pFile = fopen(path,"w");
+					if(pFile!=NULL )
+					{ ll_map(pArrayListVentas,ventasCalculoMonto);
+
+						fprintf(pFile, "%s,%s,%s,%s,%s,%s\n", "Id_Venta", "Nombre_Pelicula","Dia","Sala", "Cantidad_Entradas","Monto_Venta");
+						for(i=0; i<length; i++)
+						{
+							auxP = (Eventas*)ll_get(pArrayListVentas,i);
+							 getEventas(&bufferId,bufferNombrePelicula,&bufferDia,bufferDiaNombre,&bufferCantidadEntradas,&bufferSala,&bufferMonto,auxP);
+							printf("\nASI ESTAN LOS DATOS EN CADA ELEMENTO: %d  %s %d %s %d %d %f\n", bufferId,bufferNombrePelicula,bufferDia,bufferDiaNombre,bufferCantidadEntradas,bufferSala,bufferMonto);
+							system("pause");
+							if(auxP != NULL)
+							{
+
+								if(!getEventas(&bufferId,bufferNombrePelicula,&bufferDia,bufferDiaNombre,&bufferCantidadEntradas,&bufferSala,&bufferMonto,auxP))
+								{
+								//	printf("El nombre de peli va a la impresora asi: %s", bufferNombrePelicula);
+								//	system("pause");
+									fprintf(pFile, "%d,%s,%s,%d,%d,%f\n", bufferId,bufferNombrePelicula,bufferDiaNombre,bufferSala,bufferCantidadEntradas,bufferMonto);
+								}
+								else
+								{
+									printf("Error\n");
+								}
+								retCode = 0;
+							}
+						}
+					if(retCode == 0)
+					{
+						showMessage("ARCHIVO GUARDADO CON EXITO");
+						system("pause");
+					}
+
+
+
+						fclose(pFile);
+					}
+	        }
+		}
+
+	    if(retCode == 0)
+	    {
+	    	showMessage("Archivo guardado con exito!");
+	    }
+	    return retCode;
+}
+
+int printRegistros(LinkedList* this)
+{
+	int retCode = -1;
+	int length;
+	int i;
+    int bufferId;
+    char bufferNombrePelicula[128];
+    char bufferDiaNombre[128];
+    float bufferMonto;
+    int bufferSala;
+    int bufferCantidadEntradas;
+    int bufferDia;
+	Eventas* auxP;
+	auxP = eventa_new();
+
+	length = ll_len(this);
+
+	for(i=0; i<length; i++)
+	{
+		auxP = (Eventas*)ll_get(this,i);
+		getEventas(&bufferId,bufferNombrePelicula,&bufferDia,bufferDiaNombre,&bufferCantidadEntradas,&bufferSala,&bufferMonto,auxP);
+		printf("\nASI ESTAN LOS DATOS EN CADA ELEMENTO: %d  %s %d %s %d %d %f\n", bufferId,bufferNombrePelicula,bufferDia,bufferDiaNombre,bufferCantidadEntradas,bufferSala,bufferMonto);
+		retCode = 0;
+	}
+	return retCode;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+//////////////////////////////////////
+/*
+int controller_saveAsText(char* path , LinkedList* pArrayListVentas)
+{
+		int retCode = -1;
+	    int length;
+	    int cUnidadesTotales;
+	    int cUnidadesPorMontoA;
+	    int cUnidadesPorMontoB;
+	    int cUnidadesPorProducto;
+	    char bufferTitulo1[] = "- Cantidad de unidades vendidas totales:";
+	    char bufferTitulo2[] = "- Cantidad de ventas por un monto mayor a $10000:";
+	    char bufferTitulo3[] = "- Cantidad de ventas por un monto mayor a $20000:";
+	    char bufferTitulo4[] = "- Cantidad de TVs LCD vendidas:";
+
+	    if(path!=NULL && pArrayListVentas!=NULL)
+	    {
+	    	length = ll_len(pArrayListVentas);
+
+	        if(length == 0)
+	        {
+	        	showMessage("Aun no hay ventas cargadas.");
+	        	system("pause");
+	        }
+	        else
+	        {
+	        	cUnidadesTotales	= ll_count(pArrayListVentas,unidadesVendidas);
+	        	cUnidadesPorMontoA	= ll_count(pArrayListVentas,ventasPorMontoA);
+	        	cUnidadesPorMontoB  = ll_count(pArrayListVentas,ventasPorMontoB);
+	        	cUnidadesPorProducto = ll_count(pArrayListVentas,ventasPorProductoA);
+
+		        FILE* pFile;
+		        pFile = fopen(path,"w");
+					if(pFile!=NULL )
+					{
+						fprintf(pFile, "%s\n", "********************");
+						fprintf(pFile, "%s\n", "Informe de Ventas");
+						fprintf(pFile, "%s\n", "********************");
+						fprintf(pFile, "%s%d\n%s%d\n%s%d\n%s%d\n", bufferTitulo1, cUnidadesTotales, bufferTitulo2, cUnidadesPorMontoA,bufferTitulo3,cUnidadesPorMontoB,bufferTitulo4,cUnidadesPorProducto);
+					retCode = 0;
+					}
+
+					if(retCode == 0)
+					{
+						showMessage("ARCHIVO GUARDADO CON EXITO");
+						system("pause");
+					}
+				fclose(pFile);
+			}
+	    }
+
+	    return retCode;
+	}*/

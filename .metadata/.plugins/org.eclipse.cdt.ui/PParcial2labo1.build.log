@@ -1,0 +1,8 @@
+19:19:52 **** Incremental Build of configuration Debug for project PParcial2labo1 ****
+Info: Internal Builder is used for build
+gcc -O0 -g3 -Wall -c -fmessage-length=0 -o "src\\PParcial2labo1.o" "..\\src\\PParcial2labo1.c" 
+gcc -O0 -g3 -Wall -c -fmessage-length=0 -o "src\\articulo.o" "..\\src\\articulo.c" 
+gcc -o PParcial2labo1.exe "src\\IOdata.o" "src\\LinkedList.o" "src\\PParcial2labo1.o" "src\\articulo.o" "src\\controller.o" "src\\parser.o" 
+
+19:19:54 Build Finished. 0 errors, 0 warnings. (took 2s.385ms)
+

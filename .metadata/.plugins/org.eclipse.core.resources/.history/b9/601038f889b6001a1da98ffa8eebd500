@@ -1,0 +1,22 @@
+/*
+ * articulo.h
+ *
+ *  Created on: 24 Jun 2020
+ *      Author: Carlos
+ */
+
+#ifndef ARTICULO_H_
+#define ARTICULO_H_
+typedef struct{
+	int Id_Articulo;
+	char articulo[128];
+	char medida[128];
+	float precio;
+	int id_rubro;
+}eArticulo;
+
+
+
+
+
+#endif /* ARTICULO_H_ */

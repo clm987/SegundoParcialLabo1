@@ -1,0 +1,20 @@
+/*
+ * controller.h
+ *
+ *  Created on: 20 Jun 2020
+ *      Author: Carlos
+ */
+
+#ifndef CONTROLLER_H_
+#define CONTROLLER_H_
+#include "LinkedList.h"
+
+
+int controller_loadFromText(char* path , LinkedList* pArrayListVentas);
+//int controller_saveAsText(char* path , LinkedList* pArrayListVentas);
+int controller_saveAsText(char* path , LinkedList* pArrayListVentas);
+int printRegistros(LinkedList* this);
+
+
+
+#endif /* CONTROLLER_H_ */

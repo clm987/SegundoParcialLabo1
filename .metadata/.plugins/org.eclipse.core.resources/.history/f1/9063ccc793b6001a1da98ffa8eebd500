@@ -1,0 +1,167 @@
+/*
+ * articulo.c
+ *
+ *  Created on: 24 Jun 2020
+ *      Author: Carlos
+ */
+#include <stdio.h>
+#include <stdlib.h>
+#define LENGTH 128
+
+eArticulo* articulo_new()
+{
+	eArticulo* this = (eArticulo*) malloc(sizeof(eArticulo));
+	if(this != NULL)
+	{
+		this->Id_Articulo = 0;
+		strcpy(this->articulo,"");
+		strcpy(this->medida,"");
+		this->precio = 0;
+		this->rubro.id_rubro = 0;
+		strcpy(this->rubro.nombre_rubro,"");
+	}
+	return this;
+}
+
+eRubro* eRubro_new()
+{
+	eRubro* this = (eRubro*) malloc(sizeof(eRubro));
+	if(this != NULL)
+	{
+		this->id_rubro = 0;
+		strcpy(this->nombre_rubro,"");
+	}
+	return this;
+}
+
+eArticulo* articulo_newParametros(char* idStr, char* articulo, char* medida, char* precio, char* rubro)
+{
+	eArticulo* this = NULL;
+//	int sala;
+	//Efecha* date = NULL;
+//	int len = strlen(cuit);
+//	printf("\n len en cuit %d", len);
+//	system("pause");
+//	printf("\n el cuit viene asi %s", cuit);
+//	system("pause");
+
+this = eventa_new();
+
+	if(this != NULL)
+	{
+		if(articulo_setId(this, idStr) ==0 &&
+		   articulo_setNombreArticulo(this,articulo) == 0 &&
+		   articulo_setMedida(this,medida) == 0 &&
+		   eventa_setSala(this, atoi(Sala)) == 0 &&
+		   eventa_setNpelicula(this, Npelicula) ==0 &&
+		   eventa_setCantidadEntradas(this,atoi(CantidadEntradas)) == 0 &&
+		   eventa_setMonto(this, atof(Monto)) == 0)
+		{
+			//eventa_getSala(this,&sala);
+			//printf("\nasi levanta la sala: %d", sala);
+			return this;
+		}else
+		{
+			this = NULL;
+		}
+	}
+return this;
+}
+
+
+
+///////////////////////////////////// setters//////////////////////////////////////////
+int articulo_setId(eArticulo* this, int id)
+{
+	int retCode = -1;
+	if(this != NULL && id >= 0)
+	{
+		this->Id_Articulo = id;
+		retCode = 0;
+	}
+	return retCode;
+}
+
+int articulo_setNombreArticulo(eArticulo* this,char* nArticulo)
+{
+	int retCode = -1;
+	if(this != NULL && nArticulo != NULL)
+		{
+				strncpy(this->articulo,nArticulo,LENGTH);
+				retCode = 0;
+		}
+	return retCode;
+}
+
+int articulo_setMedida(eArticulo* this,char* medida)
+{
+	int retCode = -1;
+	if(this != NULL && medida != NULL)
+		{
+				strncpy(this->medida,medida,LENGTH);
+				retCode = 0;
+		}
+	return retCode;
+}
+
+int articulo_setPrecio(eArticulo* this, float precio)
+{
+	int retCode = -1;
+	if(this != NULL && precio >= 0)
+	{
+		this->precio = precio;
+		retCode = 0;
+	}
+	return retCode;
+}
+
+int eRubro_setId(eRubro* this,char* rubro)
+{
+	int retCode = -1;
+	if(this != NULL && rubro != NULL)
+	{
+		retCode = 0;
+		this->id_rubro = atoi(rubro);
+	}
+	return retCode;
+}
+
+
+int eArticulo_setRubros(eArticulo* this, char* rubro)
+{
+	int retCode = -1;
+	eRubro* thisRubro = NULL;
+	thisRubro = eRubro_new();
+
+	if(this != NULL && thisRubro != NULL && rubro != NULL)
+	{
+		if(eRubro_setId(thisRubro, rubro) == 0)
+		{
+			switch(atoi(rubro))
+			{
+			case 1:
+				strcpy(thisRubro->nombre_rubro,"CUIDADO DE ROPA");
+				this->rubro = *thisRubro;
+				retCode = 0;
+			break;
+			case 2:
+				strcpy(thisRubro->nombre_rubro,"LIMPIEZA Y DESINFECCION");
+				this->rubro = *thisRubro;
+				retCode = 0;
+			break;
+			case 3:
+				strcpy(thisRubro->nombre_rubro,"CUIDADO PERSONAL E HIGIENE");
+				this->rubro = *thisRubro;
+				retCode = 0;
+			break;
+			case 4:
+				strcpy(thisRubro->nombre_rubro,"CUIDADO DEL AUTOMOTOR");
+				this->rubro = *thisRubro;
+				retCode = 0;
+			break;
+			}
+		}
+	}
+
+	return retCode;
+}
